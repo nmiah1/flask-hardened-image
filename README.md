@@ -59,15 +59,15 @@ FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
 
 WORKDIR /app
 
-\# Install Python 3.14 and its package manager, then clean dnf cache to save space  
+# Install Python 3.14 and its package manager, then clean dnf cache to save space  
 RUN microdnf install \-y python3.14 python3.14-pip && \\  
     microdnf clean all
 
-\# Copy and install dependencies  
+# Copy and install dependencies  
 COPY python-app/requirements.txt .  
 RUN pip3.14 install \--no-cache-dir \-r requirements.txt
 
-\# Copy application source  
+# Copy application source  
 COPY python-app/ /app/
 
 EXPOSE 8080  
@@ -85,27 +85,27 @@ Modern standard pip configurations send pure-Python packages to /usr/local/lib/p
 This configuration resolves this by explicitly copying standard and 64-bit packages over from the builder.
 
 ```
-\# \--- Stage 1: Build & Package Compilation \---  
+# \--- Stage 1: Build & Package Compilation \---  
 FROM https://registry.access.redhat.com/hi/python:3.14-builder AS builder
 
 USER root  
 WORKDIR /app
 
-\# Compile dependencies directly using pip  
+# Compile dependencies directly using pip  
 COPY python-app/requirements.txt .  
 RUN pip install \--no-cache-dir \-r requirements.txt
 
-\# Revert back to the unprivileged default user for build compliance  
+# Revert back to the unprivileged default user for build compliance  
 USER ${CONTAINER\_DEFAULT\_USER}
 
-\# \--- Stage 2: Hardened Minimal Deployment Runtime \---  
+# \--- Stage 2: Hardened Minimal Deployment Runtime \---  
 FROM \[registry.access.redhat.com/hi/python:latest\](https://registry.access.redhat.com/hi/python:latest)
 
-\# CRITICAL RESOLUTION: Copy BOTH standard and 64-bit compiled binary directories  
+# CRITICAL RESOLUTION: Copy BOTH standard and 64-bit compiled binary directories  
 COPY \--from=builder /usr/local/lib/python3.14/site-packages /usr/local/lib/python3.14/site-packages  
 COPY \--from=builder /usr/local/lib64/python3.14/site-packages /usr/local/lib64/python3.14/site-packages
 
-\# Copy application files to runtime environment  
+# Copy application files to runtime environment  
 COPY python-app/ /app/
 
 WORKDIR /app
