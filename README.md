@@ -55,7 +55,7 @@ Local compilation of both images yields the following physical footprints and op
 This configuration relies on installing the modern Python 3.14 package manager and execution environment directly onto the raw UBI-Minimal operating system layer.
 
 ```
-FROM \[registry.access.redhat.com/ubi9/ubi-minimal:latest\](https://registry.access.redhat.com/ubi9/ubi-minimal:latest)
+FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
 
 WORKDIR /app
 
@@ -86,7 +86,7 @@ This configuration resolves this by explicitly copying standard and 64-bit packa
 
 ```
 \# \--- Stage 1: Build & Package Compilation \---  
-FROM \[registry.access.redhat.com/hi/python:3.14-builder\](https://registry.access.redhat.com/hi/python:3.14-builder) AS builder
+FROM https://registry.access.redhat.com/hi/python:3.14-builder AS builder
 
 USER root  
 WORKDIR /app
@@ -119,32 +119,36 @@ ENTRYPOINT \["python3", "/app/app.py"\]
 Because both images possess different default OS-level properties (such as Red Hat's strict health check timers and restricted non-root execution frameworks), use the following workflow to build and validate them locally.
 
 ### **1\. Execute Build Recipes**
-
+```
 podman build \-f Containerfile.minimal \-t flask-app:minimal .  
 podman build \-f Containerfile.hardened \-t flask-app:hardened .
-
+```
 ### **2\. Compare Sizes Side-by-Side**
-
+```
 podman images | grep flask-app
-
+```
 ### **3\. Start Local Container Instances**
 
 Since Red Hat base images define standard container health-checks that require custom configurations to resolve locally, use the \--no-healthcheck flag during verification to bypass local engine polling:
 
 \# Run UBI-Minimal (Mapped to host port 8080\)  
+```
 podman run \-d \--name flask-minimal \--no-healthcheck \-p 8080:8080 localhost/flask-app:minimal
-
+```
 \# Run Hardened (Mapped to host port 8081\)  
+```
 podman run \-d \--name flask-hardened \--no-healthcheck \-p 8081:8080 localhost/flask-app:hardened
-
+```
 ### **4\. Check Workload Statuses & Logs**
 
 \# Confirm containers are safely active (Up)  
+```
 podman ps \-a
-
+```
 \# Access execution stream to check Flask console warnings  
+```
 podman logs flask-hardened
-
+```
 * Navigate to **http://localhost:8080** to browse your Minimal image container.  
 * Navigate to **http://localhost:8081** to browse your Hardened image container.
 
