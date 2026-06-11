@@ -54,6 +54,7 @@ Local compilation of both images yields the following physical footprints and op
 
 This configuration relies on installing the modern Python 3.14 package manager and execution environment directly onto the raw UBI-Minimal operating system layer.
 
+```
 FROM \[registry.access.redhat.com/ubi9/ubi-minimal:latest\](https://registry.access.redhat.com/ubi9/ubi-minimal:latest)
 
 WORKDIR /app
@@ -71,6 +72,7 @@ COPY python-app/ /app/
 
 EXPOSE 8080  
 ENTRYPOINT \["python3.14", "/app/app.py"\]
+```
 
 ### **Option B: Red Hat Hardened Image (Multi-Stage with lib64 fix)**
 
@@ -82,6 +84,7 @@ Modern standard pip configurations send pure-Python packages to /usr/local/lib/p
 
 This configuration resolves this by explicitly copying standard and 64-bit packages over from the builder.
 
+```
 \# \--- Stage 1: Build & Package Compilation \---  
 FROM \[registry.access.redhat.com/hi/python:3.14-builder\](https://registry.access.redhat.com/hi/python:3.14-builder) AS builder
 
@@ -109,6 +112,7 @@ WORKDIR /app
 
 EXPOSE 8080  
 ENTRYPOINT \["python3", "/app/app.py"\]
+```
 
 ## **🚀 Local Execution and Testing**
 
