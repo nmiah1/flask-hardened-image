@@ -1,0 +1,54 @@
+{%- from 'govuk_frontend_jinja/components/notification-banner/macro.html' import govukNotificationBanner -%}
+{%- from 'govuk_frontend_jinja/components/error-summary/macro.html' import govukErrorSummary -%}
+{%- from 'govuk_frontend_jinja/components/input/macro.html' import govukInput -%}
+{%- from 'govuk_frontend_jinja/components/button/macro.html' import govukButton -%}
+{% extends "layouts/base.html" %}
+
+{% block page_title %}Profile{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Profile</h1>
+
+        {% if profile_message %}
+        {{ govukNotificationBanner({
+            'type': 'success',
+            'text': profile_message
+        }) }}
+        {% endif %}
+
+        {% if profile_error %}
+        {{ govukErrorSummary({
+            'titleText': 'There is a problem',
+            'errorList': [
+                {'text': profile_error, 'href': '#display_name'}
+            ]
+        }) }}
+        {% endif %}
+
+        <form method="post" novalidate>
+            {{ govukInput({
+                'label': {'text': 'Email', 'classes': 'govuk-label--m'},
+                'hint': {'text': 'Your email cannot be changed.'},
+                'id': 'email',
+                'name': 'email',
+                'type': 'email',
+                'value': user.email,
+                'attributes': {'readonly': 'readonly'}
+            }) }}
+
+            {{ govukInput({
+                'label': {'text': 'Display Name', 'classes': 'govuk-label--m'},
+                'hint': {'text': 'Your display name will be used in notifications, when displaying who is signed in and shared with applications you use.'},
+                'id': 'display_name',
+                'name': 'display_name',
+                'value': display_name,
+                'errorMessage': {'text': profile_error} if profile_error else none
+            }) }}
+
+            {{ govukButton({'text': 'Save changes'}) }}
+        </form>
+    </div>
+</div>
+{% endblock %}

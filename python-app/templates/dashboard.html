@@ -1,0 +1,22 @@
+{% extends "layouts/base.html" %}
+
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Dashboard</h1>
+
+        <p class="govuk-body">
+            You are signed in as <strong>{{ user.email }}</strong>.
+        </p>
+
+        <p class="govuk-body">
+            You can <a class="govuk-link" href="{{ url_for('profile') }}">view and edit your profile here</a>.
+        </p>
+
+        <h2 class="govuk-heading-l">Applications</h2>
+        <p class="govuk-body govuk-!-margin-bottom-0">No applications are linked to your account yet.</p>
+    </div>
+</div>
+{% endblock %}

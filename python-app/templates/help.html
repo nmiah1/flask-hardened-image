@@ -1,0 +1,40 @@
+{% extends "layouts/base.html" %}
+
+{% block page_title %}Help{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Help</h1>
+
+        <h2 class="govuk-heading-m">Don't recognise an email or text message?</h2>
+        <p class="govuk-body">
+            Please forward the unrecognised message to
+            <a class="govuk-link" href="mailto:{{ support_email }}">{{ support_email }}</a>.
+        </p>
+
+        <h2 class="govuk-heading-m">How do I change my password?</h2>
+        <p class="govuk-body">
+            You do not need a password to sign in to <strong>{{ sign_in_host }}</strong>.
+            You will either use your organisation's Google or Microsoft account, or each time you sign in you will receive a code via your email.
+            This saves you from having to remember another password and means your account is linked to your email.
+        </p>
+
+        <h2 class="govuk-heading-m">How is my privacy protected?</h2>
+        <p class="govuk-body">
+            We only capture, store and process data that's required to run this service.
+            You can find the <a class="govuk-link" href="{{ privacy_url }}">privacy notice here</a>.
+        </p>
+
+        <h2 class="govuk-heading-m">Are there any terms or conditions for using the service?</h2>
+        <p class="govuk-body">
+            The <a class="govuk-link" href="{{ terms_url }}">Terms of Service are available here</a>.
+        </p>
+
+        <h2 class="govuk-heading-m">More support</h2>
+        <p class="govuk-body">
+            You can email <a class="govuk-link" href="mailto:{{ support_email }}">{{ support_email }}</a> for support.
+        </p>
+    </div>
+</div>
+{% endblock %}

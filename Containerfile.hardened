@@ -1,0 +1,28 @@
+# Build stage
+FROM registry.access.redhat.com/hi/python:3.14-builder AS builder
+
+USER root
+WORKDIR /app
+
+# Copy requirements from your app folder
+COPY python-app/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Revert back to the default unprivileged builder user 
+USER ${CONTAINER_DEFAULT_USER}
+
+
+# Runtime stage
+FROM registry.access.redhat.com/hi/python:latest
+
+# FIX: Copy BOTH standard packages and 64-bit compiled binary site-packages
+COPY --from=builder /usr/local/lib/python3.14/site-packages /usr/local/lib/python3.14/site-packages
+COPY --from=builder /usr/local/lib64/python3.14/site-packages /usr/local/lib64/python3.14/site-packages
+
+# Copy your application folder contents to /app/
+COPY python-app/ /app/
+
+WORKDIR /app
+
+EXPOSE 8080
+ENTRYPOINT ["python3", "/app/app.py"]

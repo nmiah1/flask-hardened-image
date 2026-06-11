@@ -1,0 +1,17 @@
+FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
+
+WORKDIR /app
+
+# Install Python 3.14, its package manager, and immediately clean the cache
+RUN microdnf install -y python3.14 python3.14-pip && \
+    microdnf clean all
+
+# Copy and install dependencies
+COPY python-app/requirements.txt .
+RUN pip3.14 install --no-cache-dir -r requirements.txt
+
+# Copy application source
+COPY python-app/ /app/
+
+EXPOSE 8080
+ENTRYPOINT ["python3.14", "/app/app.py"]

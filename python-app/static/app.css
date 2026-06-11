@@ -1,0 +1,64 @@
+/* Internal Access – blue header and service navigation on brand colour */
+
+.govuk-header--internal-access {
+  background-color: #1d70b8;
+  border-bottom: 0;
+}
+
+.govuk-header--internal-access .govuk-header__homepage-link:link,
+.govuk-header--internal-access .govuk-header__homepage-link:visited {
+  color: #ffffff;
+}
+
+.govuk-header--internal-access .govuk-header__homepage-link:not(:focus) {
+  background-color: #1d70b8;
+}
+
+/* Service navigation (signed-in users) on blue bar */
+.govuk-header--internal-access.govuk-service-navigation,
+.govuk-service-navigation.govuk-header--internal-access {
+  background-color: #1d70b8;
+  border-bottom: 0;
+}
+
+.govuk-service-navigation.govuk-header--internal-access .govuk-service-navigation__service-name,
+.govuk-service-navigation.govuk-header--internal-access .govuk-service-navigation__link,
+.govuk-service-navigation.govuk-header--internal-access .govuk-service-navigation__active-fallback,
+.govuk-service-navigation.govuk-header--internal-access .govuk-service-navigation__toggle {
+  color: #ffffff;
+}
+
+.govuk-service-navigation.govuk-header--internal-access .govuk-service-navigation__link:hover {
+  text-decoration: underline;
+}
+
+.govuk-footer__meta--top {
+  margin-bottom: 20px;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.govuk-phase-banner {
+  border-bottom: 1px solid #b1b4b6;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.govuk-phase-banner__content {
+  margin-bottom: 0;
+}
+
+/* Footer: use crest via copyright-logo ::before only – hide macro crown graphic */
+.govuk-footer .govuk-footer__logo,
+.govuk-footer .govuk-footer__crown {
+  display: none;
+}
+
+.govuk-footer {
+  border-top: 1px solid #b1b4b6;
+  background-color: #f3f2f1;
+}
+
+.govuk-footer__meta-custom {
+  margin-bottom: 15px;
+}

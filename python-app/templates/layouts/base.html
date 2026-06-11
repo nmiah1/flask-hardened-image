@@ -1,0 +1,85 @@
+{%- from 'govuk_frontend_jinja/components/header/macro.html' import govukHeader -%}
+{%- from 'govuk_frontend_jinja/components/service-navigation/macro.html' import govukServiceNavigation -%}
+{%- from 'govuk_frontend_jinja/components/phase-banner/macro.html' import govukPhaseBanner -%}
+{%- from 'govuk_frontend_jinja/components/footer/macro.html' import govukFooter -%}
+{% extends "govuk_frontend_jinja/template.html" %}
+
+{% set themeColor = "#1d70b8" %}
+{% set serviceName = service_name if user else none %}
+{% set serviceUrl = url_for('home') %}
+
+{% block pageTitle %}{% block page_title %}{{ service_name }}{% endblock %} - GOV.UK{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ govuk_stylesheet }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+{% endblock %}
+
+{% block govukHeader %}
+{{ govukHeader({
+    'homepageUrl': url_for('home'),
+    'classes': 'govuk-header--internal-access'
+}) }}
+{% endblock %}
+
+{% block govukServiceNavigation %}
+{% if user %}
+{{ govukServiceNavigation({
+    'serviceName': service_name,
+    'serviceUrl': url_for('home'),
+    'navigationLabel': 'Menu',
+    'classes': 'govuk-header--internal-access',
+    'navigation': [
+        {'text': 'Dashboard', 'href': url_for('dashboard'), 'active': active_page == 'dashboard', 'current': active_page == 'dashboard'},
+        {'text': 'Profile', 'href': url_for('profile'), 'active': active_page == 'profile', 'current': active_page == 'profile'},
+        {'text': 'Help', 'href': url_for('help'), 'active': active_page == 'help', 'current': active_page == 'help'},
+        {'text': 'Sign out', 'href': url_for('logout')}
+    ]
+}) }}
+{% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+{{ govukPhaseBanner({
+    'tag': { 'text': phase_tag },
+    'html': 'This is a new service – your <a class="govuk-link" href="' ~ feedback_url ~ '">feedback</a> will help us to improve it.'
+}) }}
+{% endblock %}
+
+{% block content %}{% endblock %}
+
+{% block footerStart %}
+{% if user %}
+<div class="govuk-width-container">
+    <div class="govuk-footer__meta govuk-footer__meta--top">
+        <div class="govuk-footer__meta-item">
+            <p class="govuk-body govuk-!-margin-bottom-0">Signed in as {{ user.email }}</p>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block govukFooter %}
+{% set footer_meta_items = [
+    {'href': privacy_url, 'text': 'Privacy Notice'},
+    {'href': terms_url, 'text': 'Terms of Service'},
+] + ([{'href': url_for('help'), 'text': 'Help'}] if not user else []) %}
+
+{{ govukFooter({
+    'meta': {
+        'items': footer_meta_items,
+        'html': 'Built by the <a class="govuk-footer__link" href="https://www.gov.uk/government/organisations/government-digital-service">Government Digital Service</a>'
+    }
+}) }}
+{% endblock %}
+
+{% block bodyEnd %}
+<script type="module" src="{{ govuk_javascript }}"></script>
+<script type="module">
+    import { initAll } from "{{ govuk_javascript }}";
+    initAll();
+</script>
+{% block scripts %}{% endblock %}
+{% endblock %}
